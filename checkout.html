@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7faf5">
+<meta name="robots" content="noindex">
+<title>Finalizar compra | GramaZero</title>
+<link rel="icon" href="media/gramazero.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="checkout.css">
+<script src="payment.js" defer></script>
+<script src="checkout.js" defer></script>
+</head>
+<body>
+<header class="top"><div class="wrap nav">
+  <a class="logo" href="index.html" aria-label="GramaZero, voltar à loja"><img class="logo-mark" src="media/gramazero.svg" alt="" width="32" height="32"><span>GramaZero</span></a>
+  <p class="co-secure"><i class="ico ico-lock"></i> Finalizar compra</p>
+</div></header>
+<main class="wrap co">
+<form id="co-form" class="co-form" novalidate>
+  <h1>Finalizar compra</h1>
+
+  <fieldset><legend>Seus dados</legend>
+    <div class="f"><label for="nome">Nome completo</label><input id="nome" name="nome" autocomplete="name" required minlength="5"></div>
+    <div class="f"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+    <div class="f h"><label for="cpf">CPF</label><input id="cpf" name="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" required></div>
+    <div class="f h"><label for="tel">Celular com DDD</label><input id="tel" name="tel" type="tel" autocomplete="tel-national" placeholder="(00) 00000-0000" required></div>
+  </fieldset>
+
+  <fieldset><legend>Entrega</legend>
+    <div class="f h"><label for="cep">CEP</label><input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></div>
+    <div class="f h"><label for="rua">Rua</label><input id="rua" name="rua" autocomplete="address-line1" required></div>
+    <div class="f q"><label for="numero">Número</label><input id="numero" name="numero" required></div>
+    <div class="f h2"><label for="compl">Complemento (opcional)</label><input id="compl" name="compl" autocomplete="address-line2"></div>
+    <div class="f h"><label for="bairro">Bairro</label><input id="bairro" name="bairro" required></div>
+    <div class="f h2"><label for="cidade">Cidade</label><input id="cidade" name="cidade" autocomplete="address-level2" required></div>
+    <div class="f q"><label for="uf">UF</label><input id="uf" name="uf" maxlength="2" autocomplete="address-level1" required></div>
+  </fieldset>
+
+  <fieldset id="pay-methods"><legend>Pagamento</legend>
+    <label class="option co-method"><input type="radio" name="metodo" value="pix" checked><span><strong>Pix</strong><small>O código aparece depois de confirmar.</small></span><i class="ico ico-check"></i></label>
+    <label class="option co-method"><input type="radio" name="metodo" value="cartao"><span><strong>Cartão de crédito</strong><small>Preencha os dados do cartão abaixo.</small></span><i class="ico ico-card"></i></label>
+    <fieldset id="card-fields" class="co-card" disabled hidden>
+      <div class="f"><label for="cc-num">Número do cartão</label><input id="cc-num" name="cc-num" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" required></div>
+      <div class="f"><label for="cc-nome">Nome impresso no cartão</label><input id="cc-nome" name="cc-nome" autocomplete="cc-name" required></div>
+      <div class="f h"><label for="cc-val">Validade</label><input id="cc-val" name="cc-val" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" required></div>
+      <div class="f h"><label for="cc-cvv">Código de segurança</label><input id="cc-cvv" name="cc-cvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="CVV" required></div>
+      <div class="f"><label for="parcelas">Parcelas</label><select id="parcelas" name="parcelas"></select></div>
+    </fieldset>
+  </fieldset>
+
+  <button id="co-submit" class="button purchase-cta" type="submit">Confirmar pedido</button>
+  <p id="co-msg" class="co-msg" role="alert" hidden></p>
+</form>
+
+<aside class="co-summary" aria-label="Resumo do pedido">
+  <h2>Seu pedido</h2>
+  <div class="co-item"><img id="co-img" src="media/grasscut-comparativo.webp" alt="" width="96" height="96"><div><strong id="co-model">Com rodas</strong><small>2 baterias, carregador bivolt e 8 peças de corte</small><a class="text-link" href="index.html#oferta">Trocar modelo</a></div></div>
+  <div class="quantity-row"><label for="co-qty">Quantidade</label><div class="stepper">
+    <button type="button" data-step="-1" aria-label="Diminuir quantidade"><i class="ico ico-minus"></i></button>
+    <input id="co-qty" type="number" inputmode="numeric" min="1" max="99" value="1">
+    <button type="button" data-step="1" aria-label="Aumentar quantidade"><i class="ico ico-plus"></i></button>
+  </div></div>
+  <dl class="co-totals">
+    <div><dt>Subtotal</dt><dd id="co-sub">R$ 229,90</dd></div>
+    <div id="co-ship-row" hidden><dt>Frete</dt><dd id="co-ship"></dd></div>
+    <div class="co-total"><dt>Total</dt><dd id="co-total" aria-live="polite">R$ 229,90</dd></div>
+  </dl>
+</aside>
+</main>
+</body>
+</html>
