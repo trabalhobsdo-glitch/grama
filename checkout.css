@@ -33,3 +33,28 @@
 .co-total dd{font-size:1.7rem;letter-spacing:-.05em;color:var(--forest)}
 @media(max-width:860px){.co{grid-template-columns:1fr;gap:18px;padding-block:24px 56px}.co-summary{order:-1;position:static}}
 @media(max-width:700px){.co-form fieldset{padding:14px;gap:10px}.f.h2{grid-column:span 6}.f.q{grid-column:span 3}}
+
+/* ---------- pagamento (Pix / cartão) ---------- */
+[hidden]{display:none!important}
+.co-card-label{display:block;margin-bottom:6px;font-size:.82rem;font-weight:720}
+#card-element{min-height:56px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.co-card>*{grid-column:1/-1}
+.co-small{margin:8px 0 0;font-size:.78rem;color:var(--muted)}
+.co-card-err{margin:8px 0 0;font-size:.82rem;font-weight:700;color:#b3261e}
+.co-screen{padding-block:40px 80px}
+.co-panel{max-width:520px;margin:0 auto;padding:32px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:23px;box-shadow:0 16px 35px #243c1810}
+.co-panel h1{font-size:clamp(1.6rem,4vw,2rem);letter-spacing:-.04em;margin-bottom:8px}
+.co-panel p{margin:10px 0 0}
+.co-panel .button{display:flex;justify-content:center;width:100%;margin-top:16px;min-height:54px;border:0;font-size:1rem}
+.co-pix-amount{font-size:2.4rem;font-weight:800;letter-spacing:-.05em;color:var(--forest);line-height:1.1}
+.co-qr{display:block;margin:16px auto 0;width:256px;max-width:100%;height:auto;aspect-ratio:1;padding:8px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.co-pix-code{display:block;width:100%;margin-top:16px;padding:10px;resize:none;border:1px solid var(--line);border-radius:10px;background:#f7faf5;font:.74rem ui-monospace,monospace;word-break:break-all;color:var(--ink)}
+.co-wait{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.88rem;color:var(--muted)}
+.co-dot{width:10px;height:10px;border-radius:50%;background:var(--forest);animation:co-pulse 1.2s ease-in-out infinite}
+.co-spin{width:56px;height:56px;margin:0 auto 14px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--forest);animation:co-spin 1s linear infinite}
+.co-ok{width:80px;height:80px;margin:0 auto 14px;border-radius:50%;background:var(--forest);color:#fff;font-size:2.4rem;display:grid;place-items:center}
+@keyframes co-pulse{50%{opacity:.25}}
+@keyframes co-spin{to{transform:rotate(360deg)}}
+@media(max-width:700px){.co-panel{padding:24px 18px}}
+@media(prefers-reduced-motion:reduce){.co-dot,.co-spin{animation:none}}
+#card-box{grid-column:1/-1}
