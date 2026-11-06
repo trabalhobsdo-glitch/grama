@@ -65,7 +65,10 @@ quantityInput.addEventListener('change', () => {
   syncOrder();
 });
 orderButton.addEventListener('click', () => {
-  location.href = 'checkout.html?modelo=' + selectedModel() + '&qtd=' + quantity();
+  const model = selectedModel(), qty = quantity();
+  const url = 'checkout.html?modelo=' + model + '&qtd=' + qty;
+  window.fbq?.('track', 'AddToCart', { content_name: 'GramaZero ' + model, content_type: 'product', content_ids: [model], num_items: qty, value: variants[model].cents * qty / 100, currency: 'BRL' });
+  setTimeout(() => { location.href = url; }, 150);
 });
 syncOrder();
 
