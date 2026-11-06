@@ -7,14 +7,14 @@ import { clean } from "./_shared.js";
 //   Pagou (cartão):  { id, data: { event_type, id, status, amount, ... } }
 // Por padrão só registra nos Logs da Vercel. O site confirma o pagamento consultando /api/pix-status.
 //
-// OPCIONAL (Meta Conversions API): se você criar META_PIXEL_ID e META_CAPI_TOKEN na Vercel,
-// a compra paga no Pix é enviada ao Meta direto do servidor. Sem as duas variáveis, nada é enviado.
+// OPCIONAL (Meta Conversions API): se você criar META_CAPI_TOKEN na Vercel (e, se quiser outro pixel, META_PIXEL_ID),
+// a compra paga no Pix é enviada ao Meta direto do servidor. Sem o token, nada é enviado.
 const sha = (v: unknown) => createHash("sha256").update(String(v ?? "").trim().toLowerCase()).digest("hex");
 
 async function sendMetaPurchase(d: any, id: string) {
-  const pixel = clean(process.env.META_PIXEL_ID);
+  const pixel = clean(process.env.META_PIXEL_ID) || "1474529167889526";
   const token = clean(process.env.META_CAPI_TOKEN);
-  if (!pixel || !token) return;
+  if (!token) return;
   const m = d?.metadata ?? {};
   const phone = String(d?.customer?.phone ?? "").replace(/\D/g, "");
   const body = {
