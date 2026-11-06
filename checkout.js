@@ -125,7 +125,7 @@ function showScreen(name) {
   $('#co-main').hidden = name === 'form';
   $('#co-screen').hidden = name === 'form';
   document.querySelectorAll('[data-screen]').forEach(el => { el.hidden = el.dataset.screen !== name; });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name !== 'pix') window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function drawQR(canvas, text) {
   try {
@@ -146,6 +146,8 @@ function showPix(pix) {
   $('#pix-qr').hidden = false; drawQR($('#pix-qr'), pix.qrcode);
   $('#pix-exp').textContent = pix.expirationDate ? 'Válido até ' + new Date(pix.expirationDate).toLocaleString('pt-BR') : '';
   showScreen('pix');
+  // leva a tela direto para o valor e o QR Code (e não para o topo da página)
+  requestAnimationFrame(() => $('#pix-amount').scrollIntoView({ block: 'start' }));
 }
 $('#pix-code').addEventListener('focus', e => e.currentTarget.select());
 $('#pix-copy').addEventListener('click', async () => {
