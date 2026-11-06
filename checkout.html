@@ -9,6 +9,7 @@
 <link rel="icon" href="media/gramazero.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="checkout.css">
+<script src="vendor/qrcode.js" defer></script>
 <script src="payment.js" defer></script>
 <script src="checkout.js" defer></script>
 </head>
@@ -17,7 +18,7 @@
   <a class="logo" href="index.html" aria-label="GramaZero, voltar à loja"><img class="logo-mark" src="media/gramazero.svg" alt="" width="32" height="32"><span>GramaZero</span></a>
   <p class="co-secure"><i class="ico ico-lock"></i> Finalizar compra</p>
 </div></header>
-<main class="wrap co">
+<main class="wrap co" id="co-main">
 <form id="co-form" class="co-form" novalidate>
   <h1>Finalizar compra</h1>
 
@@ -39,15 +40,15 @@
   </fieldset>
 
   <fieldset id="pay-methods"><legend>Pagamento</legend>
-    <label class="option co-method"><input type="radio" name="metodo" value="pix" checked><span><strong>Pix</strong><small>O código aparece depois de confirmar.</small></span><i class="ico ico-check"></i></label>
-    <label class="option co-method"><input type="radio" name="metodo" value="cartao"><span><strong>Cartão de crédito</strong><small>Preencha os dados do cartão abaixo.</small></span><i class="ico ico-card"></i></label>
-    <fieldset id="card-fields" class="co-card" disabled hidden>
-      <div class="f"><label for="cc-num">Número do cartão</label><input id="cc-num" name="cc-num" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" required></div>
-      <div class="f"><label for="cc-nome">Nome impresso no cartão</label><input id="cc-nome" name="cc-nome" autocomplete="cc-name" required></div>
-      <div class="f h"><label for="cc-val">Validade</label><input id="cc-val" name="cc-val" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" required></div>
-      <div class="f h"><label for="cc-cvv">Código de segurança</label><input id="cc-cvv" name="cc-cvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="CVV" required></div>
-      <div class="f"><label for="parcelas">Parcelas</label><select id="parcelas" name="parcelas"></select></div>
-    </fieldset>
+    <label class="option co-method"><input type="radio" name="metodo" value="pix" checked><span><strong>Pix</strong><small>Aprovação na hora. O QR Code aparece depois de confirmar.</small></span><i class="ico ico-check"></i></label>
+    <label id="opt-card" class="option co-method" hidden><input type="radio" name="metodo" value="cartao"><span><strong>Cartão de crédito</strong><small>À vista. Os dados são digitados em um formulário seguro.</small></span><i class="ico ico-card"></i></label>
+    <div id="card-box" class="co-card" hidden>
+      <span class="co-card-label">Dados do cartão</span>
+      <div id="card-element"></div>
+      <p id="card-loading" class="co-small">Carregando formulário seguro…</p>
+      <p id="card-msg" class="co-card-err" role="alert" hidden></p>
+      <p class="co-small"><i class="ico ico-lock"></i> Os dados do cartão são protegidos pelo processador de pagamento e não passam pelo nosso servidor.</p>
+    </div>
   </fieldset>
 
   <button id="co-submit" class="button purchase-cta" type="submit">Confirmar pedido</button>
@@ -68,6 +69,38 @@
     <div class="co-total"><dt>Total</dt><dd id="co-total" aria-live="polite">R$ 229,90</dd></div>
   </dl>
 </aside>
+</main>
+
+<main class="wrap co-screen" id="co-screen" hidden>
+  <section class="co-panel" data-screen="pix" hidden>
+    <h1>Pague com Pix</h1>
+    <p>Abra o app do seu banco, escolha <strong>Pix</strong> e escaneie o QR Code ou use o código copia e cola.</p>
+    <p class="co-pix-amount" id="pix-amount"></p>
+    <canvas id="pix-qr" class="co-qr" width="280" height="280" aria-label="QR Code do Pix"></canvas>
+    <textarea id="pix-code" class="co-pix-code" readonly rows="3" aria-label="Código Pix copia e cola"></textarea>
+    <button id="pix-copy" class="button" type="button">Copiar código Pix</button>
+    <p class="co-wait"><span class="co-dot"></span> Aguardando pagamento… esta tela atualiza sozinha.</p>
+    <p class="co-small" id="pix-exp"></p>
+  </section>
+
+  <section class="co-panel" data-screen="cardwait" hidden>
+    <div class="co-spin"></div>
+    <h1>Confirmando seu pagamento…</h1>
+    <p>Estamos aguardando a confirmação do seu cartão. Não feche esta página: ela atualiza sozinha.</p>
+  </section>
+
+  <section class="co-panel" data-screen="paid" hidden>
+    <div class="co-ok" aria-hidden="true">✓</div>
+    <h1>Pagamento confirmado!</h1>
+    <p>Recebemos o seu <span id="paid-with">Pix</span> de <strong id="paid-amount"></strong>. Em breve você receberá as informações do pedido no e-mail <strong id="paid-email"></strong>.</p>
+    <a class="button" href="index.html">Voltar para a loja</a>
+  </section>
+
+  <section class="co-panel" data-screen="failed" hidden>
+    <h1 id="fail-title">Pix expirado ou cancelado</h1>
+    <p id="fail-text">Não identificamos o pagamento. Você pode gerar um novo Pix.</p>
+    <button id="fail-retry" class="button" type="button">Gerar novo Pix</button>
+  </section>
 </main>
 </body>
 </html>
