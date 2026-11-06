@@ -15,7 +15,7 @@ const model = MODELS[params.get('modelo')] ? params.get('modelo') : 'rodas';
 const clampQty = v => Math.min(99, Math.max(1, Math.floor(Number(v)) || 1));
 qty.value = clampQty(params.get('qtd'));
 
-const state = { method: 'pix', cardEnabled: false, loading: false, paidWith: 'pix', paidAmount: null, waitId: '', pix: null, purchaseSent: false };
+const state = { method: 'pix', cardEnabled: false, loading: false, paidWith: 'pix', paidAmount: null, waitId: '', pix: null, purchaseSent: '' };
 
 function totals() {
   const sub = MODELS[model].cents * clampQty(qty.value);
@@ -51,9 +51,11 @@ const pixelData = cents => ({ content_name: 'GramaZero ' + MODELS[model].label, 
 window.fbq?.('track', 'InitiateCheckout', pixelData(totals().total));
 function trackPaymentInfo(cents) { window.fbq?.('track', 'AddPaymentInfo', pixelData(cents)); }
 function trackPurchase(cents) {
-  if (state.purchaseSent) return; state.purchaseSent = true;
+  // Um disparo por Pix/pedido (cada Pix novo tem id novo e conta como nova venda)
+  const key = state.waitId || model;
+  if (state.purchaseSent === key) return; state.purchaseSent = key;
   // eventID igual ao do servidor (webhook) para o Meta não contar 2x
-  window.fbq?.('track', 'Purchase', pixelData(cents), { eventID: 'purchase_' + (state.waitId || model) });
+  window.fbq?.('track', 'Purchase', pixelData(cents), { eventID: 'purchase_' + key });
 }
 
 /* ---------- máscaras e validações ---------- */
@@ -215,6 +217,7 @@ form.addEventListener('submit', async e => {
       state.pix = r.pix; state.waitId = r.pix.id; state.paidWith = 'pix'; state.paidAmount = r.pix.amount ?? total;
       window.GramaPay.unmountCard();
       showPix(r.pix); startPolling('pix'); trackPaymentInfo(state.paidAmount);
+      trackPurchase(state.paidAmount); // Pix gerado = venda marcada no Pixel na hora
     }
   } catch {
     show('Não foi possível concluir agora. Tente de novo em instantes.', true);
