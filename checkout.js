@@ -47,7 +47,7 @@ qty.addEventListener('change', () => { qty.value = clampQty(qty.value); render()
 render();
 
 /* ---------- pixels (só disparam se o Pixel do Meta/TikTok estiver instalado no site) ---------- */
-const pixelData = cents => ({ content_name: MODELS[model].label, content_type: 'product', num_items: clampQty(qty.value), value: cents / 100, currency: 'BRL' });
+const pixelData = cents => ({ content_name: 'GramaZero ' + MODELS[model].label, content_type: 'product', content_ids: [model], contents: [{ id: model, quantity: clampQty(qty.value) }], num_items: clampQty(qty.value), value: cents / 100, currency: 'BRL' });
 window.fbq?.('track', 'InitiateCheckout', pixelData(totals().total));
 function trackPaymentInfo(cents) { window.fbq?.('track', 'AddPaymentInfo', pixelData(cents)); }
 function trackPurchase(cents) {
